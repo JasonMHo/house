@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selectcode>
+
+  <code name="district" description="区">
+  	<parameter key="1" value="南山"/>
+  	<parameter key="2" value="福田"/>
+
+  </code>
+  
+  <code name="street" description="街道">
+    <parameter key="11" value="南头"/>
+    <parameter key="12" value="南油"/>
+    <parameter key="13" value="中山公园"/>
+    <parameter key="21" value="华强北"/>
+    <parameter key="22" value="华强南"/>
+    <parameter key="23" value="车公庙"/>
+
+   </code>
+   
+</selectcode>
+

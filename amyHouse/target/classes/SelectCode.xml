@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selectcode>
+
+  <code name="position" description="方位">
+  	<parameter key="1" value="华北"/>
+  	<parameter key="2" value="东北"/>
+  	<parameter key="3" value="华东"/>
+  	<parameter key="4" value="中南"/>
+  	<parameter key="5" value="西南"/>
+  	<parameter key="6" value="西北"/>
+  </code>
+  
+  <code name="district" description="省份">
+    <parameter key="11" value="北京"/>
+    <parameter key="12" value="天津"/>
+    <parameter key="13" value="河北省"/>
+    <parameter key="14" value="山西省"/>
+    <parameter key="15" value="内蒙古"/>
+    <parameter key="21" value="辽宁省"/>
+    <parameter key="22" value="吉林省"/>
+    <parameter key="23" value="黑龙江"/>
+    <parameter key="31" value="上海"/>
+    <parameter key="32" value="江苏省"/>
+    <parameter key="33" value="浙江省"/>
+    <parameter key="34" value="安徽省"/>
+    <parameter key="35" value="福建省"/>
+    <parameter key="36" value="江西省"/>
+    <parameter key="37" value="山东省"/>
+    <parameter key="41" value="河南省"/>
+    <parameter key="42" value="湖北省"/>
+    <parameter key="43" value="湖南省"/>
+    <parameter key="44" value="广东省"/>
+    <parameter key="45" value="广西省"/>
+    <parameter key="46" value="海南省"/>
+    <parameter key="50" value="重庆"/>
+    <parameter key="51" value="四川省"/>
+    <parameter key="52" value="贵州省"/>
+    <parameter key="53" value="云南省"/>
+    <parameter key="54" value="西藏"/>
+    <parameter key="61" value="陕西省"/>
+    <parameter key="62" value="甘肃省"/>
+    <parameter key="63" value="青海省"/>
+    <parameter key="64" value="宁夏省"/>
+    <parameter key="65" value="新疆"/>
+   </code>
+   
+</selectcode>
+

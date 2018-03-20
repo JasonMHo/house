@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.dao.HouseDao">
+
+  <resultMap type="cn.entity.THouse" id="baseMap">
+  <!-- id 映射表字段主键和属性 -->
+      <id column="id" property="id"/>
+  <!-- result 映射表字段其他键和属性 如果相同，也必须写出来，这里的 baseMap 用于继承 -->
+   <result column="userid" property="userid"/>
+   <result column="typeid" property="typeid"/>
+   <result column="streetid" property="streetid"/>
+   <result column="title" property="title"/>
+   <result column="description" property="description"/>
+   <result column="price" property="price"/>
+   <result column="pubdate" property="pubdate"/>
+   <result column="adddate" property="adddate"/>
+   <result column="floorage" property="floorage"/>
+   <result column="contact" property="contact"/>
+  </resultMap>
+  
+  
+
+  <resultMap type="THouse" id="getPageHouseListRmp" extends="baseMap">
+   <!-- 这是 association 的第一种写法 -->
+   <!--   <association property="ttype" column="typeid" select="cn.dao.TypeDao.getTypeNameById"></association> -->
+      
+  <!-- 这是 association 的第二种写法 -->
+      <!-- association 关联，当属性是一个对象时，多对一关联 -->
+      <association property="ttype" javaType="TType">
+       <id column="tid" property="id" />
+       <result column="typename" property="name"/>
+     </association> 
+     
+      <association property="user" javaType="TUser">
+       <id column="uid" property="id" />
+       <result column="username" property="userName"/>
+       <result column="password" property="passWord"/>
+       <result column="telephone" property="telephone"/>
+       <result column="realname" property="realName"/>
+       <result column="isadmin" property="isAdmin"/>
+     </association> 
+     
+      <association property="street" javaType="TStreet">
+       <id column="stid" property="id" />
+       <result column="stname" property="name"/>
+     </association> 
+     
+      <association property="district" javaType="TDistrict">
+       <id column="did" property="id" />
+       <result column="dname" property="name"/>
+     </association> 
+     
+  </resultMap>
+  
+  
+
+
+<!-- 五张表联表查询 所有房子的所有信息-->
+    <select id="getAllHouse" resultMap="getPageHouseListRmp" >
+       select h.ID,h.USERID,h.TYPEID,h.STREETID,h.TITLE,h.DESCRIPTION,h.PRICE,h.PUBDATE,h.ADDDATE,h.FLOORAGE,h.CONTACT,
+			u.ID uid,u.USERNAME,u.PASSWORD,u.REALNAME,u.ISADMIN,
+			st.ID stid,st.NAME stname,
+			d.ID did,d.NAME dname,
+			t.NAME typename
+		FROM t_house h 
+		INNER JOIN t_user u,t_type t,t_street st,t_district d
+		WHERE h.USERID = u.ID AND h.TYPEID = t.ID AND h.STREETID = st.ID AND st.DISTRICTID = d.ID
+    </select>
+    
+    <select id="getHouseTotalCount" resultType="int">
+        select count(id) from t_house
+    </select>
+    
+    <select id="getHouseById"  resultMap="getPageHouseListRmp"  parameterType="long">
+      select h.ID,h.USERID,h.TYPEID,h.STREETID,h.TITLE,h.DESCRIPTION,h.PRICE,h.PUBDATE,h.ADDDATE,h.FLOORAGE,h.CONTACT,
+			u.ID uid,u.USERNAME,u.PASSWORD,u.REALNAME,u.ISADMIN,
+			st.ID stid,st.NAME stname,
+			d.ID did,d.NAME dname,
+			t.NAME typename
+		FROM t_house h 
+		INNER JOIN t_user u,t_type t,t_street st,t_district d
+		WHERE h.USERID = u.ID AND h.TYPEID = t.ID AND h.STREETID = st.ID AND st.DISTRICTID = d.ID        
+                AND h.ID = #{id}
+    </select>
+    
+    <!--keyProperty  useGeneratedKeys 是把自动增长的id也封装到对象里面，这样就可以直接获取到id 做其他业务操作了-->
+    <insert id="addHouse" parameterType="THouse"  keyProperty="id" useGeneratedKeys="true">
+	    insert into t_house (USERID,TYPEID,STREETID,TITLE,DESCRIPTION,PRICE,ADDDATE,FLOORAGE,CONTACT) 
+	  	values (#{userid},#{typeid},#{streetid},#{title},#{description},#{price},#{adddate},#{floorage},#{contact})
+    </insert>
+    
+    <update id="updateHouse" parameterType="THouse">
+	    update t_house set USERID=#{userid},TYPEID=#{typeid},STREETID=#{streetid},TITLE=#{title}, DESCRIPTION=#{description}, 
+	                       PRICE=#{price},ADDDATE=#{adddate},FLOORAGE=#{floorage},CONTACT=#{contact},PUBDATE=#{pubdate}
+	  	where id=#{id}
+    </update>
+    
+    
+    <delete id="deleteHouse" parameterType="long">
+        delete from t_house where id = #{id}
+    </delete>
+    
+    
+    
+  
+<!-- 五张表联表查询 根据查询条件获取分页时，当前页面内的数据集合-->
+    <select id="getHousesPage" resultMap="getPageHouseListRmp" parameterType="cn.query.HouseQuery">
+       select h.ID,h.USERID,h.TYPEID,h.STREETID,h.TITLE,h.DESCRIPTION,h.PRICE,h.PUBDATE,h.ADDDATE,h.FLOORAGE,h.CONTACT,
+			u.ID uid,u.USERNAME,u.PASSWORD,u.REALNAME,u.ISADMIN,
+			st.ID stid,st.NAME stname,
+			d.ID did,d.NAME dname,
+			t.NAME typename
+			<!-- p.URL  -->
+		FROM t_house h 
+		INNER JOIN t_user u ON h.USERID = u.ID 
+		INNER JOIN t_type t ON  h.TYPEID = t.ID  
+		INNER JOIN t_street st ON h.STREETID = st.ID 
+		INNER JOIN t_district d on  st.DISTRICTID = d.ID 
+		<where>
+			<if test="typeId != null">
+				and h.typeid = #{typeId}
+			</if>
+			<if test="title != null and title != ''">
+				and h.title like concat('%',#{title},'%')
+			</if>
+			<choose>
+				<when test="priceType != null and priceType == 1">
+					<![CDATA[and h.price >= 0 and h.price < 1000]]>
+				</when>
+				<when test="priceType != null and priceType == 2">
+					<![CDATA[and h.price >= 1000 and h.price < 2000]]>
+				</when>
+				<when test="priceType != null and priceType == 3">
+					<![CDATA[and h.price >= 2000]]>
+				</when>
+			</choose>
+			<choose>
+				<when test="floorageType != null and floorageType == 1">
+					<![CDATA[and h.floorage >= 0 and h.floorage < 60]]>
+				</when>
+				<when test="floorageType != null and floorageType == 2">
+					<![CDATA[and h.floorage >= 60 and h.floorage < 100]]>
+				</when>
+				<when test="floorageType != null and floorageType == 3">
+					<![CDATA[and h.floorage >= 100 and h.floorage < 150]]>
+				</when>
+				<when test="floorageType != null and floorageType == 4">
+					<![CDATA[and h.floorage >= 150]]>
+				</when>
+			</choose>
+			<if test="districtId != null">
+				and d.id = #{districtId}
+			</if>
+			<if test="streetId != null">
+				and st.id = #{streetId}
+			</if>
+			
+		</where>
+		
+		limit #{firstResult},#{maxResult}
+    </select>
+    
+    
+<!-- 五张表联表查询 根据查询条件获取分页时，信息总数-->
+    <select id="getHouseTotalCountByPage" resultType="int" parameterType="cn.query.HouseQuery">
+   		SELECT 
+  			count(h.id) 
+		FROM t_house h 
+			INNER JOIN t_type t ON h.typeid = t.id  
+			INNER JOIN t_user u ON h.userid = u.id
+			INNER JOIN t_street s ON h.streetid = s.id 
+			INNER JOIN t_district d ON s.districtid = d.id
+		<where>
+			<if test="typeId != null">
+				and h.typeid = #{typeId}
+			</if>
+			<if test="title != null and title != ''">
+				and h.title like concat('%',#{title},'%')
+			</if>
+			<choose>
+				<when test="priceType != null and priceType == 1">
+					<![CDATA[and h.price >= 0 and h.price < 1000]]>
+				</when>
+				<when test="priceType != null and priceType == 2">
+					<![CDATA[and h.price >= 1000 and h.price < 2000]]>
+				</when>
+				<when test="priceType != null and priceType == 3">
+					<![CDATA[and h.price >= 2000]]>
+				</when>
+			</choose>
+			<choose>
+				<when test="floorageType != null and floorageType == 1">
+					<![CDATA[and h.floorage >= 0 and h.floorage < 60]]>
+				</when>
+				<when test="floorageType != null and floorageType == 2">
+					<![CDATA[and h.floorage >= 60 and h.floorage < 100]]>
+				</when>
+				<when test="floorageType != null and floorageType == 3">
+					<![CDATA[and h.floorage >= 100 and h.floorage < 150]]>
+				</when>
+				<when test="floorageType != null and floorageType == 4">
+					<![CDATA[and h.floorage >= 150]]>
+				</when>
+			</choose>
+			<if test="districtId != null">
+				and d.id = #{districtId}
+			</if>
+			<if test="streetId != null">
+				and s.id = #{streetId}
+			</if>
+		</where>
+  </select>
+    
+	<select id="findHouse" parameterType="THouse" resultType="boolean">
+		<!-- 返回boolean值  根据 typeid streetid floorage 判断是不是同一所房子 -->
+	  <![CDATA[ select count(id) from t_house where `typeid`=#{typeid} and `streetid`=#{streetid} and `floorage`=#{floorage} ]]>
+	</select>
+
+	
+</mapper>

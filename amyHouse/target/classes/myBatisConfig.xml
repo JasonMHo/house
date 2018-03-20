@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!-- 
+<settings>
+   懒加载
+  <setting name="lazyLoadingEnabled" value="true"/>
+  <setting name="aggressiveLazyLoading" value="false"/>
+   开启二级缓存
+   <setting name="cacheEnabled" value="true"/>
+</settings> -->
+
+	<!-- 类型别名 -->
+	<typeAliases>
+	  <typeAlias type="cn.entity.TDistrict" alias="TDistrict"/>
+	  <typeAlias type="cn.entity.THouse" alias="THouse"/>
+	  <typeAlias type="cn.entity.TStreet" alias="TStreet"/>
+	  <typeAlias type="cn.entity.TUser" alias="TUser"/>
+	  <typeAlias type="cn.entity.TType" alias="TType"/>
+	  <typeAlias type="cn.entity.TPic" alias="TPic"/>
+	</typeAliases> 
+	
+	<!-- 使用自定义类型句柄 -->
+<!--  
+	<typeHandlers>
+	  <typeHandler handler="cn.mybatis.typeHandlers.MyTypeHandler" javaType="String" jdbcType="VARCHAR" />
+	</typeHandlers>
+-->
+	
+	
+	<mappers>
+		<mapper resource="cn/dao/UserMapper.xml"/>
+		<mapper resource="cn/dao/HouseMapper.xml"/>
+		<mapper resource="cn/dao/StreetMapper.xml"/>
+		<mapper resource="cn/dao/DistrictMapper.xml"/>
+		<mapper resource="cn/dao/TypeMapper.xml"/>
+		<mapper resource="cn/dao/PicMapper.xml"/>
+	</mappers>
+	
+	
+	
+</configuration>
