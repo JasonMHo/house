@@ -42,7 +42,7 @@ IDE: MyEclipse
 7. 登录的用户：       查询、  增加、修改、删除信息
 
 数据库中有六张表：
-![tables.png](https://github.com/JasonMHo/house/blob/master/tables.png)
+![tables.png](https://github.com/JasonMHo/house/blob/master/table.png)
 
 
 基本功能效果：
