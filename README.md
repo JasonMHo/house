@@ -39,7 +39,7 @@ IDE: MyEclipse
 4. 分页查询（定义一个分页类 Page）
 5. 查询数据的回显
 6. 不登录用户：       查询
-登录的用户：       查询、  增加、修改、删除信息
+7. 登录的用户：       查询、  增加、修改、删除信息
 
 数据库中有六张表：
 ![tables.png](https://github.com/JasonMHo/house/blob/master/tables.png)
